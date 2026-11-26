@@ -6,6 +6,42 @@ data "aws_cloudfront_cache_policy" "cachingDisabled" {
   name = "Managed-CachingDisabled"
 }
 
+# -------------------------------------------- #
+# CLOUDFRONT VPC ORIGIN
+# INTERNAL APPLICATION LOAD BALANCER
+# -------------------------------------------- #
+resource "aws_cloudfront_vpc_origin" "internal_alb" {
+
+  vpc_origin_endpoint_config {
+    name = "roboshop-dev-internal-alb-vpc-origin"
+
+    # Existing internal ALB ARN
+    arn = module.alb.alb_arn
+
+    # ALB listener ports
+    http_port  = 80
+    https_port = 443
+
+    # CloudFront communicates with ALB using HTTP
+    origin_protocol_policy = "http-only"
+
+    origin_ssl_protocols {
+      items    = ["TLSv1.2"]
+      quantity = 1
+    }
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "roboshop-dev-internal-alb-vpc-origin"
+    }
+  )
+}
+
+# ------------------------------------------------------------- #
+# Create Cloudfront Distribution                                #
+# ------------------------------------------------------------- #
 resource "aws_cloudfront_distribution" "roboshop" {
   enabled             = true
   is_ipv6_enabled     = false
