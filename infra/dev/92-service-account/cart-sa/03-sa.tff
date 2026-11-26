@@ -1,9 +1,9 @@
 # ----------------------------------------------------------
-# Create Namespace: "ecommerce-dev"
+# Create Namespace: "roboshop-dev"
 # ----------------------------------------------------------
-# resource "kubernetes_namespace_v1" "ecommerce_dev" {
+# resource "kubernetes_namespace_v1" "roboshop_dev" {
 #  metadata {
-#    name = var.namespace     # ecommerce-dev
+#    name = var.namespace     # roboshop-dev
 
 #    labels = {
 #      "app.kubernetes.io/part-of" = var.project
@@ -17,8 +17,8 @@
 # ----------------------------------------------------------
 resource "kubernetes_service_account" "cart_sa" {
   metadata {
-    name      = var.service_account       # car-sa
-    namespace = var.namespace             # ecommerce-dev
+    name      = var.service_account       # cart-sa
+    namespace = var.namespace             # roboshop-dev
 
     annotations = {
       "eks.amazonaws.com/role-arn" = aws_iam_role.cart_role.arn
