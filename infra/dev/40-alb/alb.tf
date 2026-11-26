@@ -1,0 +1,91 @@
+# ====================================================================================
+# API Gateway VPC Link → Internal ALB (HTTP 80) → EKS microservices (ports 8001–8004)
+# ====================================================================================
+
+# Security Group for ALB
+module "alb_sg" {
+  source = "git::https://github.com/vaheedgit26/Infra-1.0.git//modules/sg"
+
+  vpc_id         = module.vpc.vpc_id
+  sg_name        = local.alb_sg_name
+  sg_description = "ALB Security Group"
+
+  common_tags    = local.common_tags
+}
+
+# Allow ALB traffic to all EKS microservices (8001-8004)
+resource "aws_security_group_rule" "alb_to_eks_nodegroup" {
+  for_each = local.microservices
+
+  type                     = "ingress"
+  from_port                = each.value.port
+  to_port                  = each.value.port
+  protocol                 = "tcp"
+
+  security_group_id        = module.eks.node_security_group_id
+  source_security_group_id = module.alb_sg.sg_id
+
+  description = "Allow ALB traffic to ${each.key} microservice"
+}
+
+# VPC Link Security Group (No inbound needed, APIGATEWAY will discover through integration)
+resource "aws_security_group" "apigw_vpc_link_sg" {
+  name        = "${local.resource_name}-apigw-vpc-link-sg"
+  description = "Security group for API Gateway VPC Link V2"
+  vpc_id      = module.vpc.vpc_id
+
+  # Only allow outbound HTTP traffic to ALB
+  egress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [module.alb_sg.sg_id]
+    description     = "Allow HTTP traffic to internal ALB"
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${local.resource_name}-apigw-vpc-link-sg"
+  })
+}
+
+# ALB allows traffic from VPC LINK on Port:80 only
+resource "aws_security_group_rule" "vpc_link_to_alb" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+
+  security_group_id        = module.alb_sg.sg_id
+  source_security_group_id = aws_security_group.apigw_vpc_link_sg.id
+}
+
+
+# ALB Module Calling
+module "alb" {
+  source = "git::https://github.com/vaheedgit26/Infra-1.0.git//modules/alb"
+
+  alb_name     = "${local.resource_name}-alb"
+  internal     = true
+  alb_sg_ids   = [module.alb_sg.sg_id]
+  subnets      = module.vpc.private_subnet_ids 
+
+  target_type  = "ip"
+  vpc_id       = module.vpc.vpc_id
+
+  listener_mode = "http"    # https, http_to_https
+  # acm_certificate_arn = var.acm_certificate_arn
+
+  services = local.microservices
+
+  project      = var.project
+  env          = var.env
+  common_tags  = local.common_tags
+
+  depends_on = [
+    module.alb_sg,
+    aws_security_group_rule.alb_to_eks_nodegroup,
+    aws_security_group.apigw_vpc_link_sg,
+    aws_security_group_rule.vpc_link_to_alb
+  ]
+
+}
