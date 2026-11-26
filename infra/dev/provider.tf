@@ -13,8 +13,8 @@ terraform {
 
   # Remote Backend
   backend "s3" {
-    bucket         = "ecommerce-dev-tfstate-123"
-    key            = "ecommerce-vpc-eks/terraform.tfstate"
+    bucket         = "roboshop-dev-tfstate-123"
+    key            = "roboshop-vpc-eks/terraform.tfstate"
     region         = "us-east-1"
     # encrypt        = true
     use_lockfile   = true   # Enables native S3 state locking (Terraform 1.10+)
@@ -28,7 +28,7 @@ provider "aws" {
 
   # default_tags {
   #   tags = {
-  #     Project     = "shopverse"
+  #     Project     = "roboshop"
   #     Env         = "dev"
   #     ManagedBy   = "terraform"
   #   }
