@@ -1,10 +1,10 @@
 module "secrets_manager" {
   source = "git::https://github.com/vaheedgit26/Infra-1.0.git//modules/secrets-manager"
 
-  project        = var.project                        # "ecommerce"
+  project        = var.project                        # "roboshop"
   env            = var.env                            # "dev"
   
-  db_secret_name = local.aws_secret_name              # /ecommerce/dev/postgre-jwt-credentials
+  db_secret_name = local.aws_secret_name              # /roboshop/dev/postgre-jwt-credentials
   
   db_username    = var.db_username
   db_password    = var.db_password
