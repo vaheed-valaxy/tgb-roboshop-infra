@@ -1,6 +1,6 @@
 resource "aws_iam_policy" "kyverno_ecr_policy" {
   name        = "${local.resource_name}-kyverno-ecr-policy"
-  description = "Allow Kyverno to read Shopverse ECR repositories"
+  description = "Allow Kyverno to read Roboshop ECR repositories"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -35,9 +35,9 @@ resource "aws_iam_policy" "kyverno_ecr_policy" {
         ]
 
         Resource = [
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/shopverse-dev/*",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/shopverse-qa/*",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/shopverse/*"
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop-dev/*",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop-qa/*",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop/*"
         ]
       }
     ]
