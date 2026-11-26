@@ -70,9 +70,9 @@ resource "aws_iam_policy" "gha_runner_eks_describe_policy" {
         ]
         # Resource = "*"
         Resource = [
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ecommerce-dev/*",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ecommerce-qa/*",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ecommerce/*"
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop-dev/*",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop-qa/*",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop/*"
         ]
       }
     ]
