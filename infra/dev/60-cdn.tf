@@ -6,10 +6,10 @@ data "aws_cloudfront_cache_policy" "cachingDisabled" {
   name = "Managed-CachingDisabled"
 }
 
-# -------------------------------------------- #
+# ====================================================== #
 # CLOUDFRONT VPC ORIGIN
 # INTERNAL APPLICATION LOAD BALANCER
-# -------------------------------------------- #
+# ====================================================== #
 resource "aws_cloudfront_vpc_origin" "internal_alb" {
 
   vpc_origin_endpoint_config {
@@ -39,9 +39,9 @@ resource "aws_cloudfront_vpc_origin" "internal_alb" {
   )
 }
 
-# ------------------------------------------------------------- #
-# Create Cloudfront Distribution                                #
-# ------------------------------------------------------------- #
+# ============================================================== #
+# Create Cloudfront Distribution                                 #
+# ============================================================== #
 resource "aws_cloudfront_distribution" "roboshop" {
   enabled             = true
   is_ipv6_enabled     = false
