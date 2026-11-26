@@ -1,9 +1,9 @@
-variable "project"                    { default = "ecommerce" }
+variable "project"                    { default = "roboshop" }
 variable "env"                        { default = "dev" }
 variable "region"                     { default = "us-east-1" }
 
 variable "ami_id"                     { default = "ami-0ea87431b78a82070" }
 variable "public_key_name"            { default = "us-east-1" }
 
-variable "remote_state_s3_bucket"     { default = "ecommerce-dev-tfstate-123" }
-variable "remote_state_s3_bucket_key" { default = "ecommerce-vpc-eks/terraform.tfstate" }
+variable "remote_state_s3_bucket"     { default = "roboshop-dev-tfstate-123" }
+variable "remote_state_s3_bucket_key" { default = "roboshop-vpc-eks/terraform.tfstate" }
