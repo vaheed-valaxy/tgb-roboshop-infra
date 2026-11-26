@@ -13,7 +13,7 @@ data "aws_cloudfront_cache_policy" "cachingDisabled" {
 resource "aws_cloudfront_vpc_origin" "internal_alb" {
 
   vpc_origin_endpoint_config {
-    name = "roboshop-dev-internal-alb-vpc-origin"
+    name = "${var.project}-${var.env}-internal-alb-vpc-origin"                         # "roboshop-dev-internal-alb-vpc-origin"
 
     # Existing internal ALB ARN
     arn = module.alb.alb_arn
