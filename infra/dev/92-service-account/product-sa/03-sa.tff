@@ -1,9 +1,9 @@
 # ----------------------------------------------------------
-# Create Namespace: "ecommerce-dev"
+# Create Namespace: "roboshop-dev"
 # ----------------------------------------------------------
 resource "kubernetes_namespace_v1" "arc_runners" {
   metadata {
-    name = var.namespace     # ecommerce-dev
+    name = var.namespace     # roboshop-dev
 
     labels = {
       "app.kubernetes.io/part-of" = var.project
@@ -18,7 +18,7 @@ resource "kubernetes_namespace_v1" "arc_runners" {
 resource "kubernetes_service_account" "product_sa" {
   metadata {
     name      = var.service_account       # product-sa
-    namespace = kubernetes_namespace_v1.arc_runners.metadata[0].name    # var.namespace     # ecommerce-dev
+    namespace = kubernetes_namespace_v1.arc_runners.metadata[0].name    # var.namespace     # roboshop-dev
 
     annotations = {
       "eks.amazonaws.com/role-arn" = aws_iam_role.product_role.arn
