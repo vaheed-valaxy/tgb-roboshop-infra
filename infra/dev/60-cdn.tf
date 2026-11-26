@@ -6,6 +6,11 @@ data "aws_cloudfront_cache_policy" "cachingDisabled" {
   name = "Managed-CachingDisabled"
 }
 
+# Retrieve AWS-managed CloudFront prefix list (this is configured in "alb.tf")
+# data "aws_ec2_managed_prefix_list" "cloudfront" {
+#   name = "com.amazonaws.global.cloudfront.origin-facing"
+# }
+
 # ====================================================== #
 # CLOUDFRONT VPC ORIGIN
 # INTERNAL APPLICATION LOAD BALANCER
