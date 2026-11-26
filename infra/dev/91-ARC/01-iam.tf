@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "gha_arc_runner_trust_policy" {
     condition {
       test     = "StringEquals"
       variable = "${replace(local.eks_oidc_provider_url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:arc-runners:ecommerce-gha-arc-runner-sa"]
+      values   = ["system:serviceaccount:arc-runners:roboshop-gha-arc-runner-sa"]
     }
 
     condition {
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "gha_arc_runner_trust_policy" {
 
 # IAM Role
 resource "aws_iam_role" "gha_arc_runner_role" {
-  name               = "${local.resource_name}-gha-arc-runner-role"                        # ecommerce-dev-gha-arc-runner-role
+  name               = "${local.resource_name}-gha-arc-runner-role"                        # roboshop-dev-gha-arc-runner-role
   assume_role_policy = data.aws_iam_policy_document.gha_arc_runner_trust_policy.json
 
   tags = {
@@ -95,9 +95,9 @@ resource "aws_iam_policy" "gha_arc_runner_policy" {
         # Resource = "arn:aws:ecr:*:${local.aws_account_id}:repository/*"
 
         Resource = [
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ecommerce-dev/*",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ecommerce-qa/*",
-          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/ecommerce/*"
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop-dev/*",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop-qa/*",
+          "arn:aws:ecr:${var.region}:${local.aws_account_id}:repository/roboshop/*"
         ]
       }
     ]
