@@ -4,7 +4,7 @@ module "alb_sg" {
 
   vpc_id         = module.vpc.vpc_id
   sg_name        = local.alb_sg_name
-  sg_description = "ALB Security Group"
+  sg_description = "Roboshop internal ALB Security Group"
 
   common_tags    = local.common_tags
 }
@@ -16,7 +16,7 @@ data "aws_ec2_managed_prefix_list" "cloudfront" {
 
 # Allow HTTP traffic from CloudFront to Internal ALB
 resource "aws_security_group_rule" "cloudfront_to_alb" {
-  description = "Allow HTTP traffic from CloudFront origin-facing servers"
+  description = "Allow HTTP traffic from CloudFront origin-facing servers to ALB"
 
   type              = "ingress"
   from_port         = 80
@@ -66,7 +66,7 @@ module "alb" {
 
   depends_on = [
     module.alb_sg,
-    aws_security_group.cloudfront_to_alb,
+    aws_security_group_rule.cloudfront_to_alb,
     aws_security_group_rule.alb_to_eks_nodegroup  
   ]
 }
@@ -80,10 +80,10 @@ resource "aws_cloudfront_vpc_origin" "internal_alb" {
 
   vpc_origin_endpoint_config {
 
-    name = "ecommerce-dev-internal-alb-vpc-origin"
+    name = "roboshop-dev-internal-alb-vpc-origin"
 
     # Existing internal ALB ARN
-    arn = aws_lb.internal_alb.arn
+    arn = module.alb.alb_arn
 
     # ALB listener ports
     http_port  = 80
@@ -101,7 +101,7 @@ resource "aws_cloudfront_vpc_origin" "internal_alb" {
   tags = merge(
     local.common_tags,
     {
-      Name = "ecommerce-dev-internal-alb-vpc-origin"
+      Name = "roboshop-dev-internal-alb-vpc-origin"
     }
   )
 
