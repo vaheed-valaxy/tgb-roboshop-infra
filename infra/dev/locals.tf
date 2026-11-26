@@ -30,7 +30,7 @@ locals {
     "k8s.io/cluster-autoscaler/${local.eks_cluster_name}" = "owned"
   }
 
-  aws_secret_name = "/${var.project}/${var.env}/postgre-jwt-credentials"      # /roboshop/dev/postgre-jwt-credentials
+  aws_secret_name = "/${var.project}/${var.env}/mysql-jwt-credentials"      # /roboshop/dev/mysql-jwt-credentials
 
   # RDS Variables
   identifier                 = "${local.resource_name}-mysql"
